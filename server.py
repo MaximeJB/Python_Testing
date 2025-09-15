@@ -1,6 +1,10 @@
 import json
 from flask import Flask,render_template,request,redirect,flash,url_for
+from email.utils import parseaddr
 
+
+def is_valid_email(email):
+    return "@" in parseaddr(email)[1]
 
 def loadClubs():
     with open('clubs.json') as c:
@@ -26,7 +30,23 @@ def index():
 
 @app.route('/showSummary',methods=['POST'])
 def showSummary():
-    club = [club for club in clubs if club['email'] == request.form['email']][0]
+    email = request.form['email']
+
+    if not email:
+        flash ("email not found")
+        return redirect(url_for('index'))
+    
+    if not is_valid_email(email):
+        flash("Invalid email format")
+        return redirect(url_for('index'))
+    
+    clubs = loadClubs()
+
+    try:
+        club = [club for club in clubs if club['email'].lower() == email.lower()][0]
+    except IndexError:
+        flash("Sorry, that email wasn't found.")
+        return redirect(url_for('index'))
     return render_template('welcome.html',club=club,competitions=competitions)
 
 
