@@ -1,5 +1,5 @@
 import json
-from flask import Flask,render_template,request,redirect,flash,url_for
+from flask import Flask,render_template,request,redirect,flash,url_for, abort
 from email.utils import parseaddr
 
 
@@ -31,13 +31,9 @@ def index():
 @app.route('/showSummary',methods=['POST'])
 def showSummary():
     email = request.form['email']
-
-    if not email:
-        flash ("email not found")
-        return redirect(url_for('index'))
     
-    if not is_valid_email(email):
-        flash("Invalid email format")
+    if not is_valid_email(email) or not email:
+        flash("Invalid email format or email not found")
         return redirect(url_for('index'))
     
     clubs = loadClubs()
@@ -65,9 +61,21 @@ def book(competition,club):
 def purchasePlaces():
     competition = [c for c in competitions if c['name'] == request.form['competition']][0]
     club = [c for c in clubs if c['name'] == request.form['club']][0]
-    placesRequired = int(request.form['places'])
-    competition['numberOfPlaces'] = int(competition['numberOfPlaces'])-placesRequired
+
+
+    place_asked = int(request.form['places'])
+    number_of_place = int(competition['numberOfPlaces'])
+    points = int(club['points'])
+
+    if place_asked > points or place_asked < 0:
+        abort(400, description="Not enough points to book this many places")
+    if place_asked > number_of_place:
+        abort(400, description="Not enough place available")
+    
+    competition['numberOfPlaces'] = number_of_place - place_asked
+    club['points'] = points - place_asked
     flash('Great-booking complete!')
+
     return render_template('welcome.html', club=club, competitions=competitions)
 
 
