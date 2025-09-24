@@ -66,14 +66,19 @@ def purchasePlaces():
     place_asked = int(request.form['places'])
     number_of_place = int(competition['numberOfPlaces'])
     points = int(club['points'])
+    booked = club.get('booked',0)
+    
 
-    if place_asked > points or place_asked < 0:
-        abort(400, description="Not enough points to book this many places")
-    if place_asked > number_of_place:
-        abort(400, description="Not enough place available")
+    if place_asked > points or place_asked <= 0:
+        abort(400, description="Not enough points to book !")
+    if place_asked > number_of_place or place_asked > 12 :
+        abort(400, description="Not enough places available")
+    if booked + place_asked > 12:
+        abort(400, description="Too many places already booked !")
     
     competition['numberOfPlaces'] = number_of_place - place_asked
     club['points'] = points - place_asked
+    club['booked'] = club.get('booked', 0) + place_asked
     flash('Great-booking complete!')
 
     return render_template('welcome.html', club=club, competitions=competitions)
