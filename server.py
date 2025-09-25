@@ -1,15 +1,18 @@
 import json
 from flask import Flask,render_template,request,redirect,flash,url_for, abort
 from email.utils import parseaddr
+from datetime import datetime
+import pdb 
 
 
 def is_valid_email(email):
     return "@" in parseaddr(email)[1]
 
+
 def loadClubs():
     with open('clubs.json') as c:
-         listOfClubs = json.load(c)['clubs']
-         return listOfClubs
+        listOfClubs = json.load(c)['clubs']
+        return listOfClubs
 
 
 def loadCompetitions():
@@ -53,7 +56,7 @@ def book(competition,club):
     if foundClub and foundCompetition:
         return render_template('booking.html',club=foundClub,competition=foundCompetition)
     else:
-        flash("Something went wrong-please try again")
+        flash("Something went wrong please try again")
         return render_template('welcome.html', club=club, competitions=competitions)
 
 
@@ -67,7 +70,7 @@ def purchasePlaces():
     number_of_place = int(competition['numberOfPlaces'])
     points = int(club['points'])
     booked = club.get('booked',0)
-    
+    comp_date = datetime.strptime(competition["date"], "%Y-%m-%d %H:%M:%S")
 
     if place_asked > points or place_asked <= 0:
         abort(400, description="Not enough points to book !")
@@ -75,7 +78,9 @@ def purchasePlaces():
         abort(400, description="Not enough places available")
     if booked + place_asked > 12:
         abort(400, description="Too many places already booked !")
-    
+    if comp_date < datetime.now():
+        abort(400, description="Cannot book past competition")
+
     competition['numberOfPlaces'] = number_of_place - place_asked
     club['points'] = points - place_asked
     club['booked'] = club.get('booked', 0) + place_asked
