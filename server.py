@@ -90,7 +90,14 @@ def purchasePlaces():
 
 
 # TODO: Add route for points display
-
+@app.route('/points')
+def show_points():
+    try:
+        clubs = loadClubs()
+        return render_template('points.html', clubs=clubs)
+    except:
+        flash("Unable to load points data at this time.")
+        return redirect(url_for('index'))
 
 @app.route('/logout')
 def logout():
