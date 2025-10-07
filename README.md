@@ -1,51 +1,175 @@
-# gudlift-registration
+# 🏋️ Güdlft - Plateforme de Réservation pour Compétitions Régionales
 
-1. Why
+## 🎯 Présentation du Projet
 
+**Güdlft Regional** est une application web développée avec **Flask** qui permet aux clubs de force régionaux de gérer les inscriptions aux compétitions de manière équitable et transparente.
 
-    This is a proof of concept (POC) project to show a light-weight version of our competition booking platform. The aim is the keep things as light as possible, and use feedback from the users to iterate.
+> ⚡ **Statut du projet** : Phase 1 terminée • Phase 2 terminée • Tests et débogages terminées
 
-2. Getting Started
+## 🎓 Contexte de l'Exercice
 
-    This project uses the following technologies:
+### Mission :
+En tant que développeur chez Güdlft, nous devions :
+- **🔍 Déboguer** l'application existante de la Phase 1
+- **🧪 Implémenter** une suite de tests complète (TDD)
+- **🚀 Développer** les fonctionnalités de la Phase 2
 
-    * Python v3.x+
+## GUDLFT Regional - Documentation
 
-    * [Flask](https://flask.palletsprojects.com/en/1.1.x/)
+## Phase 1 - Espace Club 
 
-        Whereas Django does a lot of things for us out of the box, Flask allows us to add only what we need. 
-     
+- Tableau de bord club
+- Système de réservation intelligent
+- Messages d'erreur gérés
+- Gestion des sessions
 
-    * [Virtual environment](https://virtualenv.pypa.io/en/stable/installation.html)
+## Phase 2 - Fonctionnalités Publiques
 
-        This ensures you'll be able to install the correct packages without interfering with Python on your machine.
+- Tableau public des points
+- Optimisation des performances
 
-        Before you begin, please ensure you have this installed globally. 
+## Installation & Démarrage
 
+### Prérequis
 
-3. Installation
+- Python 3.8 ou supérieur
+- pip (gestionnaire de paquets Python)
+- Navigateur web moderne
 
-    - After cloning, change into the directory and type <code>virtualenv .</code>. This will then set up a a virtual python environment within that directory.
+### 🚀 Installation Express
 
-    - Next, type <code>source bin/activate</code>. You should see that your command prompt has changed to the name of the folder. This means that you can install packages in here without affecting affecting files outside. To deactivate, type <code>deactivate</code>
+```bash
+# 1. Cloner le projet
+git clone 
+cd gudlft-regional
 
-    - Rather than hunting around for the packages you need, you can install in one step. Type <code>pip install -r requirements.txt</code>. This will install all the packages listed in the respective file. If you install a package, make sure others know by updating the requirements.txt file. An easy way to do this is <code>pip freeze > requirements.txt</code>
+# 2. Créer l'environnement virtuel
+python -m venv venv
 
-    - Flask requires that you set an environmental variable to the python file. However you do that, you'll want to set the file to be <code>server.py</code>. Check [here](https://flask.palletsprojects.com/en/1.1.x/quickstart/#a-minimal-application) for more details
+# 3. Activer l'environnement
+# Sur Windows :
+venv\Scripts\activate
+# Sur Mac/Linux :
+source venv/bin/activate
 
-    - You should now be ready to test the application. In the directory, type either <code>flask run</code> or <code>python -m flask run</code>. The app should respond with an address you should be able to go to using your browser.
+# 4. Installer les dépendances
+pip install -r requirements.txt
 
-4. Current Setup
+# 5. Lancer l'application
+python -m flask run
+```
 
-    The app is powered by [JSON files](https://www.tutorialspoint.com/json/json_quick_guide.htm). This is to get around having a DB until we actually need one. The main ones are:
-     
-    * competitions.json - list of competitions
-    * clubs.json - list of clubs with relevant information. You can look here to see what email addresses the app will accept for login.
+L'application sera accessible sur : http://localhost:5000
 
-5. Testing
+## 📁 Structure du Projet
 
-    You are free to use whatever testing framework you like-the main thing is that you can show what tests you are using.
+```text
+gudlft-regional/
+├── app.py                 # Application Flask principale
+├── clubs.json            # Base de données des clubs
+├── competitions.json     # Base de données des compétitions
+├── requirements.txt      # Dépendances Python
+├── tests/               # Suite de tests complète
+└── templates/           # Templates HTML
+    ├── index.html       # Page de connexion
+    ├── welcome.html     # Tableau de bord
+    ├── booking.html     # Page de réservation
+    └── points.html      # Tableau public des points
+```
 
-    We also like to show how well we're testing, so there's a module called 
-    [coverage](https://coverage.readthedocs.io/en/coverage-5.1/) you should add to your project.
+## Tour de l'Application
+
+### 1. Page d'Accueil (/)
+
+- Interface de connexion simple avec email
+- Validation des emails existants dans la base
+- Redirection vers le tableau de bord personnel
+
+### 2. Tableau de Bord (/board)
+
+```python
+# Données affichées :
+- Club: "Iron Legends"
+- Points: 25
+- Compétitions à venir:
+  * "Spring Festival" (13 places disponibles)
+  * "Fall Classic" (20 places disponibles)
+```
+
+### 3. Réservation de Places (/book/competition_name)
+
+- Sélection du nombre de places (1-12 max)
+- Vérification en temps réel des contraintes
+- Confirmation avec mise à jour immédiate des points
+
+### 4. Tableau Public (/points)
+
+- Classement de tous les clubs
+- Affichage des points disponibles
+- Accessible sans connexion
+
+### 📊 Métriques de Qualité
+
+- Couverture de code : > 60% visé
+- Temps de réponse : < 5s (compétitions), < 2s (points)
+- Tests automatisés : pytest 
+
+## Développement & Bonnes Pratiques
+
+###  Conventions de Code
+
+#### Gestion des Branches
+
+```bash
+# Types de branches
+feature/tableau-points-public    # Nouvelle fonctionnalité
+bug/email-issue       # Correction de bug
+```
+
+#### Méthodologie TDD
+
+```python
+# Cycle Red-Green-Refactor
+1. Écrire un test qui échoue (Red)
+2. Implémenter le code minimal pour passer (Green)  
+3. Optimiser et nettoyer le code (Refactor)
+```
+
+## 🐛 Débogage et Résolution de Problèmes
+
+## 🚀 Performance et Optimisation
+
+### Contraintes
+
+- 6 utilisateurs simultanés minimum
+- Temps de chargement < 5 secondes
+- Mises à jour < 2 secondes
+
+### Ressources Utiles
+
+📚 Documentation Flask : https://flask.palletsprojects.com/
+
+🧪 Documentation pytest : https://docs.pytest.org/
+
+📊 Documentation Locust : https://docs.locust.io/
+
+### Workflow de Contribution
+
+```bash
+# 1. Créer une branche
+git checkout -b feature/ma-nouvelle-fonctionnalite
+
+# 2. Développer avec tests
+# 3. Vérifier la couverture
+pytest --cov=app
+
+# 4. Tests de performance
+locust --headless -u 6 -r 2
+
+# 5. Merge après validation
+git checkout master
+git merge feature/ma-nouvelle-fonctionnalite
+```
+
+---
 
